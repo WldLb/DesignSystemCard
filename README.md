@@ -38,7 +38,8 @@ variantes `sm`, `md`, `lg` et `bg`, image à gauche, à droite ou au-dessus, th�
 
 ## Démarrage
 
-Prérequis : **Node.js 20.19+ ou 22.12+** (version demandée par Vite 8 ; projet testé avec Node 25 et npm 11).
+Prérequis : **Node.js 22.12+** (Web Test Runner 1.0 demande Node 22, Vite 8 demande 22.12 ; projet testé avec
+Node 25 et npm 11).
 
 ```bash
 npm install
@@ -189,12 +190,12 @@ L'observateur est branché dans `connectedCallback` et débranché dans `disconn
 - **HTML sémantique** : la carte est un `<article>`, le titre un `<h2>`, la date un `<time datetime="AAAA-MM-JJ">`.
 - **Nom accessible** : `aria-labelledby` relie l'`<article>` à son titre ; le lecteur d'écran annonce
   « article, *titre* ».
-- **Image** : `alt` vide par défaut (image décorative, ignorée). Sur le Storybook, AXA met le titre dans `alt`,
-  ce qui le fait lire deux fois ; ici, on renseigne `image-alt` seulement si l'image apporte une information.
+- **Image** : `alt` vide par défaut (image décorative, ignorée par les lecteurs d'écran). On renseigne `image-alt`
+  seulement si l'image apporte une information que le texte ne donne pas.
 - **Éléments décoratifs** : le séparateur `-` et la flèche des liens ont `aria-hidden="true"`.
 - **Liens** : toujours de vrais `<a href>` (voir [Choix de conception](#choix-de-conception)).
 - **Focus clavier** : contour visible avec `:focus-visible` (blanc sur fond sombre).
-- **Contraste** : bouton rouge `#e3000a` (texte blanc ≈ 6,2:1, niveau AA) ; voile sombre sous le texte de la
+- **Contraste** : bouton rouge `#e3000a` (texte blanc ≈ 4,92:1, niveau AA) ; voile sombre sous le texte de la
   variante `bg`.
 - **Attribut `hidden`** : `:host([hidden]) { display: none; }`, sinon `display: block` sur `:host` l'empêcherait de
   cacher la carte.
@@ -208,8 +209,8 @@ L'observateur est branché dans `connectedCallback` et débranché dans `disconn
   Seule la propriété `imageAlt` (accessibilité) a été ajoutée.
 - **`cardTitle` et pas `title`** : `title` est un attribut HTML natif qui affiche une info-bulle au survol.
 - **Liens et boutons toujours en `<a href>`** : ils mènent vers une page, donc ce sont des liens ;
-  `type: "button"` ne change que l'apparence. Le Storybook AXA place un `<axa-button>` dans un `<a>`, c'est-à-dire
-  un bouton dans un lien, ce que HTML interdit ; ce composant l'évite.
+  `type: "button"` ne change que l'apparence. Un `<button>` placé dans un `<a>` serait du HTML invalide
+  (contenu interactif imbriqué).
 - **`links` en `type: Array`** : Lit convertit le JSON de l'attribut en tableau ; même forme que la prop AXA.
 - **Types union plutôt qu'`enum`** : le `tsconfig` active `erasableSyntaxOnly`, qui interdit les `enum`.
 - **Date découpée à la main** plutôt qu'avec `new Date()` : `new Date('2021-03-21')` est lu en UTC et peut afficher
@@ -232,10 +233,8 @@ avec l'inspecteur du navigateur (**F12 → onglet Calculé**), sur les stories *
 **Large Card** et **Light Card**.
 
 Seules les valeurs visibles à l'inspecteur ont été reprises : le code source du Storybook n'a pas été copié.
-Dans [`src/axa-card.style.ts`](src/axa-card.style.ts), chaque valeur porte un commentaire qui donne son origine :
-
-- `F12` : valeur relevée à l'inspecteur sur le Storybook ;
-- `choix` : valeur impossible à mesurer sur le Storybook, choisie d'après la maquette du PDF « Cards v1.2.0 ».
+Les deux tableaux ci-dessous donnent l'origine de chaque valeur : relevée à l'inspecteur, ou choisie d'après la
+maquette du PDF « Cards v1.2.0 » quand elle n'était pas mesurable.
 
 ### Valeurs relevées sur le Storybook (F12)
 
@@ -260,7 +259,7 @@ Dans [`src/axa-card.style.ts`](src/axa-card.style.ts), chaque valeur porte un co
 | Élément | Choix | Raison |
 |---|---|---|
 | Liens et boutons | lien bleu AXA `#00008f` en majuscules, bouton rouge `#e3000a` en forme de pilule | sur le Storybook, les liens et boutons de la carte gardent le style par défaut du navigateur |
-| Rouge des boutons | `#e3000a` plutôt que `#ff1721` | contraste du texte blanc ≈ 6,2:1 contre 3,9:1 : seul `#e3000a` atteint le niveau AA des WCAG (4,5:1) |
+| Rouge des boutons | `#e3000a` plutôt que `#ff1721` | contraste du texte blanc ≈ 4,92:1 contre 3,9:1 : seul `#e3000a` atteint le niveau AA des WCAG (4,5:1) |
 | Carte `sm` | image de 88 × 88px, titre de 16px | pas de story `sm` ; proportions reprises de la maquette PDF |
 | Thème sombre (`is-inverse`) | fond bleu AXA `#00008f`, textes en blanc | pas de story `isInverse` |
 | Marge intérieure de la carte `bg` | 24px | sur le Storybook, le texte est presque collé au bord |
@@ -298,18 +297,21 @@ pour les Web Components. Outils :
 | [@open-wc/testing](https://open-wc.org/docs/testing/testing-package/) | `fixture`, `expect` (Chai), `waitUntil`, audit axe |
 | `@web/dev-server-esbuild` | compile le TypeScript à la volée, en lisant `tsconfig.json` (décorateurs) |
 
-**11 tests**, regroupés par fonctionnalité :
+**17 tests**, regroupés par fonctionnalité :
 
 | Fonctionnalité | Ce qui est vérifié |
 |---|---|
 | Textes | surtitre, titre et contenu affichés ; aucun élément vide quand les propriétés ne sont pas renseignées |
-| Date | `2021-03-21` affichée `21/03/2021` dans une balise `<time datetime="2021-03-21">` |
+| Date | `2021-03-21` affichée `21/03/2021` dans une balise `<time datetime="2021-03-21">` ; une date non ISO est affichée telle quelle ; le séparateur n'apparaît qu'avec un surtitre et une date |
 | Image | `alt` vide par défaut (image décorative) |
-| Liens et boutons | un `<a href>` par lien, avec son libellé |
-| Variantes | classe du type sur la carte (`card--lg` par défaut, `card--md`…) |
-| Réactivité Lit | valeurs par défaut du Storybook ; rendu mis à jour quand une propriété change |
-| Responsive | une carte plus étroite que le `breakpoint` passe en affichage vertical |
+| Liens et boutons | un `<a href>` par lien, avec son libellé ; flèche seulement pour `type: "link"` ; liens lus depuis l'attribut JSON |
+| Variantes | classe du type sur la carte (`card--lg` par défaut, `card--md`…) ; `inverted` ignoré sans image ; rendu mis à jour quand une propriété change |
+| Responsive | une carte plus étroite que le `breakpoint` passe en vertical ; `breakpoint="0"` désactive le responsive ; les cartes `sm` et `bg` ne changent pas |
 | Accessibilité | `aria-labelledby` pointe vers le titre ; audit axe sans erreur sur une carte complète |
+
+Les tests qui vérifient qu'une carte **ne** passe **pas** en vertical attendent deux images d'affichage
+(`requestAnimationFrame`) : le temps que le `ResizeObserver` mesure la carte et que la largeur soit appliquée.
+Sans cette attente, ils passeraient même si le code était faux.
 
 Le dossier `test/` a son propre `tsconfig.json` (qui étend celui de la racine) pour ajouter les types de Mocha
 sans les rendre visibles dans `src/`.

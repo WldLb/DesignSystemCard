@@ -1,26 +1,35 @@
-import {fixture, html, expect, waitUntil} from '@open-wc/testing';
+import {fixture, html, expect, waitUntil, nextFrame} from '@open-wc/testing';
 import {AxaCard} from '../src/axa-card.js';
 import type {CardLink} from '../src/axa-card.js';
 
-/**
-  Tests unitaires du composant axa-card
- **/
-
 const IMAGE = 'https://picsum.photos/500/800';
 
-/** Raccourci : renvoie l'élément trouvé dans le Shadow DOM de la carte. */
 function query<T extends Element = HTMLElement>(el: AxaCard, selector: string): T | null {
   return el.shadowRoot!.querySelector<T>(selector);
 }
 
-/** Raccourci : renvoie la balise <article> de la carte. */
 function article(el: AxaCard): HTMLElement {
   return query(el, 'article')!;
 }
 
-describe('axa-card', () => {
+// Renvoie un booléen plutôt que l'élément : si l'assertion échoue, Web Test Runner
+// n'a pas à afficher un élément du DOM dans le message d'erreur (ce qui peut le bloquer).
+function has(el: AxaCard, selector: string): boolean {
+  return query(el, selector) !== null;
+}
 
-	// Tests de l'affichage des textes de la carte : subhead, cardTitle et content.
+// Pour vérifier qu'une carte N'A PAS changé, il faut d'abord laisser le composant mesurer sa largeur :
+// image 1 : le ResizeObserver mesure la carte et programme un requestAnimationFrame ;
+// image 2 : ce requestAnimationFrame applique la largeur ;
+// image 3 : on est sûr d'arriver après lui, puis on attend le rendu Lit.
+async function waitForMeasure(el: AxaCard) {
+  await nextFrame();
+  await nextFrame();
+  await nextFrame();
+  await el.updateComplete;
+}
+
+describe('axa-card', () => {
   describe('textes', () => {
     it('affiche le subhead, le titre et le contenu', async () => {
       const el = await fixture<AxaCard>(html`
@@ -32,19 +41,17 @@ describe('axa-card', () => {
       expect(query(el, '.content')!.textContent!.trim()).to.equal('Texte de la carte');
     });
 
-		// Tests de l'affichage des éléments vides quand les props ne sont pas renseignées.
-    it('n\'affiche aucun élément vide quand les props ne sont pas renseignées', async () => {
+    it("n'affiche aucun élément vide quand les props ne sont pas renseignées", async () => {
       const el = await fixture<AxaCard>(html`<axa-card></axa-card>`);
 
-      expect(query(el, '.meta')).to.be.null;
-      expect(query(el, 'h2')).to.be.null;
-      expect(query(el, '.content')).to.be.null;
-      expect(query(el, 'img')).to.be.null;
-      expect(query(el, '.links')).to.be.null;
+      expect(has(el, '.meta')).to.be.false;
+      expect(has(el, 'h2')).to.be.false;
+      expect(has(el, '.content')).to.be.false;
+      expect(has(el, 'img')).to.be.false;
+      expect(has(el, '.links')).to.be.false;
     });
   });
 
-	// Tests de la date de la carte.
   describe('date', () => {
     it('formate une date ISO en JJ/MM/AAAA dans une balise <time>', async () => {
       const el = await fixture<AxaCard>(html`<axa-card card-date="2021-03-21"></axa-card>`);
@@ -53,9 +60,24 @@ describe('axa-card', () => {
       expect(time.textContent!.trim()).to.equal('21/03/2021');
       expect(time.getAttribute('datetime')).to.equal('2021-03-21');
     });
+
+    it("affiche telle quelle une date qui n'est pas au format ISO", async () => {
+      const el = await fixture<AxaCard>(html`<axa-card card-date="11/12/2020"></axa-card>`);
+
+      expect(query(el, 'time')!.textContent!.trim()).to.equal('11/12/2020');
+    });
+
+    it('affiche le séparateur seulement quand il y a un subhead et une date', async () => {
+      const both = await fixture<AxaCard>(html`<axa-card subhead="Sub" card-date="2021-03-21"></axa-card>`);
+      const subheadOnly = await fixture<AxaCard>(html`<axa-card subhead="Sub"></axa-card>`);
+      const dateOnly = await fixture<AxaCard>(html`<axa-card card-date="2021-03-21"></axa-card>`);
+
+      expect(has(both, '.separator')).to.be.true;
+      expect(has(subheadOnly, '.separator')).to.be.false;
+      expect(has(dateOnly, '.separator')).to.be.false;
+    });
   });
 
-	// Tests de l'image de la carte.
   describe('image', () => {
     it('donne un alt vide par défaut (image décorative)', async () => {
       const el = await fixture<AxaCard>(html`<axa-card image=${IMAGE}></axa-card>`);
@@ -64,7 +86,6 @@ describe('axa-card', () => {
     });
   });
 
-	// Tests des liens et boutons de la carte.
   describe('liens et boutons', () => {
     const links: CardLink[] = [
       {url: '/sinistre', label: 'Make a claim', type: 'link', variation: 'primary'},
@@ -81,9 +102,25 @@ describe('axa-card', () => {
       expect(anchors[1].getAttribute('href')).to.equal('/devis');
       expect(anchors[1].textContent).to.contain('Get a quote');
     });
+
+    it('affiche la flèche seulement pour les liens de type "link"', async () => {
+      const el = await fixture<AxaCard>(html`<axa-card .links=${links}></axa-card>`);
+      const anchors = el.shadowRoot!.querySelectorAll('a');
+
+      expect(anchors[0].querySelectorAll('.arrow').length).to.equal(1);
+      expect(anchors[1].querySelectorAll('.arrow').length).to.equal(0);
+    });
+
+    it("lit les liens écrits en JSON dans l'attribut HTML", async () => {
+      const el = await fixture<AxaCard>(html`
+        <axa-card links='[{"url": "/sinistre", "label": "Make a claim"}]'></axa-card>
+      `);
+
+      expect(el.links).to.deep.equal([{url: '/sinistre', label: 'Make a claim'}]);
+      expect(query(el, 'a')!.getAttribute('href')).to.equal('/sinistre');
+    });
   });
 
-	// Tests de la classe CSS du type de carte (sm, md, lg, bg).
   describe('variantes de mise en page', () => {
     it('ajoute la classe du type (card--lg par défaut, card--md…)', async () => {
       const lg = await fixture<AxaCard>(html`<axa-card></axa-card>`);
@@ -93,19 +130,13 @@ describe('axa-card', () => {
       expect(article(md).classList.contains('card--md')).to.be.true;
       expect(article(md).classList.contains('card--lg')).to.be.false;
     });
-  });
 
-	// Tests de la réactivité des props avec Lit.
-  describe('réactivité Lit', () => {
-    it('a les valeurs par défaut du Storybook', async () => {
-      const el = await fixture<AxaCard>(html`<axa-card></axa-card>`);
+    it("ignore inverted quand il n'y a pas d'image", async () => {
+      const withImage = await fixture<AxaCard>(html`<axa-card inverted image=${IMAGE}></axa-card>`);
+      const withoutImage = await fixture<AxaCard>(html`<axa-card inverted></axa-card>`);
 
-      expect(el.type).to.equal('lg');
-      expect(el.inverted).to.be.false;
-      expect(el.vertical).to.be.false;
-      expect(el.isInverse).to.be.false;
-      expect(el.links).to.deep.equal([]);
-      expect(el.breakpoint).to.equal(750);
+      expect(article(withImage).classList.contains('card--inverted')).to.be.true;
+      expect(article(withoutImage).classList.contains('card--inverted')).to.be.false;
     });
 
     it('met à jour le rendu quand une prop change', async () => {
@@ -120,16 +151,31 @@ describe('axa-card', () => {
     });
   });
 
-	// Tests de la réactivité au redimensionnement de la carte.
   describe('responsive (breakpoint)', () => {
     it('passe en vertical quand la carte est plus étroite que le breakpoint', async () => {
       const el = await fixture<AxaCard>(html`<axa-card type="lg" style="width: 500px"></axa-card>`);
 
       await waitUntil(() => article(el).classList.contains('card--vertical'), 'la carte doit passer en vertical');
     });
+
+    it('ne passe pas en vertical avec breakpoint="0"', async () => {
+      const el = await fixture<AxaCard>(html`<axa-card type="lg" breakpoint="0" style="width: 500px"></axa-card>`);
+      await waitForMeasure(el);
+
+      expect(article(el).classList.contains('card--vertical')).to.be.false;
+    });
+
+    it('ne change pas les cartes sm et bg, même étroites', async () => {
+      const sm = await fixture<AxaCard>(html`<axa-card type="sm" style="width: 300px"></axa-card>`);
+      const bg = await fixture<AxaCard>(html`<axa-card type="bg" style="width: 300px"></axa-card>`);
+      await waitForMeasure(sm);
+      await waitForMeasure(bg);
+
+      expect(article(sm).classList.contains('card--vertical')).to.be.false;
+      expect(article(bg).classList.contains('card--vertical')).to.be.false;
+    });
   });
 
-	// Tests d'accessibilité avec axe-core.
   describe('accessibilité', () => {
     it('relie la carte à son titre avec aria-labelledby', async () => {
       const el = await fixture<AxaCard>(html`<axa-card card-title="Car Insurance"></axa-card>`);
@@ -138,7 +184,7 @@ describe('axa-card', () => {
       expect(el.shadowRoot!.getElementById(id)!.textContent!.trim()).to.equal('Car Insurance');
     });
 
-    it('passe l\'audit d\'accessibilité axe (carte complète)', async () => {
+    it("passe l'audit d'accessibilité axe (carte complète)", async () => {
       const el = await fixture<AxaCard>(html`
         <axa-card
           image=${IMAGE}
