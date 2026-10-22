@@ -9,6 +9,11 @@ export class AxaCard extends LitElement {
       display: block;
     }
 
+    //Sans cette règle, display: block ci-dessus empêcherait l'attribut hidden de masquer la carte.
+    :host([hidden]) {
+      display : none,
+    }
+
     .image {
       display: block;
       width: 100%;
@@ -40,17 +45,17 @@ export class AxaCard extends LitElement {
   // Render the UI as a function of component state
   render() {
     return html`
-        <article>
+        <article class="card" aria-labelledby=${this.cardTitle ? 'card-title' : nothing}>
             ${this.image
             ? html`<img class="image" src=${this.image} alt=${this.imageAlt} loading="lazy" />`
             : nothing}
             <div class="body">
-                ${this.subhead ? html `<p> ${this.subhead}</p>` : nothing}
+                ${this.subhead ? html `<p class="subhead"> ${this.subhead}</p>` : nothing}
                 ${this.cardDate ? html `
                         <time datetime=${this.cardDate}>${this.fomateDate(this.cardDate)}</time>
                         ` : nothing}
-                ${this.cardTitle ? html `<h2> ${this.cardTitle}</h2>` : nothing}
-                ${this.content ? html `<p> ${this.content}</p>` : nothing}
+                ${this.cardTitle ? html `<h2 d="card-title" class="title"> ${this.cardTitle}</h2>` : nothing}
+                ${this.content ? html `<p class="content"> ${this.content}</p>` : nothing}
             </div>
         </article>
     `;
