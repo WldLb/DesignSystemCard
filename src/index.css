@@ -1,24 +1,25 @@
-:root {
-  color-scheme: light dark;
-  background-color: #ffffff;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    background-color: #16171d;
-  }
-}
+/* Styles de la page de démo uniquement (pas du composant). */
 
 body {
   margin: 0;
+  padding: 32px 16px;
+  font-family: 'Source Sans 3', Arial, sans-serif;
+  color: #343c3d;
+  background: #ffffff;
+}
+
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* Barre de contrôles du playground. */
+.controls {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  min-width: 320px;
-  min-height: 100svh;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
+  flex-wrap: wrap;
+  gap: 16px 24px;
+  margin-bottom: 32px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: #f2f2f2;
 }
