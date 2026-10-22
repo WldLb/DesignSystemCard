@@ -1,33 +1,21 @@
 import {css} from 'lit';
 
-/**
- * Styles du composant axa-card (encapsulés dans son Shadow DOM).
- *
- * Origine des valeurs :
- * - « F12 » : relevée avec l'inspecteur du navigateur (onglet Calculé) sur la page Card
- *   du Storybook AXA, stories Default, Medium Card, Large Card et Light Card ;
- * - « choix » : non mesurable sur la page (les liens et boutons y gardent le style par défaut
- *   du navigateur, pas de story sm ni isInverse) → valeur choisie d'après la maquette PDF.
- *
- * Les valeurs sont exposées en CSS custom properties sur :host : une page peut les surcharger
- * sans toucher au composant, par exemple `axa-card { --axa-card-radius: 0; }`.
- */
 export const styles = css`
   :host {
     /* ---------- Tokens AXA ---------- */
-    --axa-card-font: 'Source Sans 3', 'Source Sans Pro', Arial, sans-serif; /* F12 */
-    --axa-card-text: #343c3d; /* F12 : titre et contenu */
-    --axa-card-subhead: #e3000a; /* F12 */
-    --axa-card-date: #606776; /* F12 */
-    --axa-card-link: #00008f; /* choix */
-    --axa-card-link-hover: #0000f7; /* choix */
-    --axa-card-button: #e3000a; /* choix : même rouge que le subhead */
-    --axa-card-button-hover: #cc0009; /* choix */
-    --axa-card-focus: #00008f; /* choix */
-    --axa-card-inverse-bg: #00008f; /* choix */
-    --axa-card-inverse-text: #ffffff; /* F12 : textes de la Light Card */
-    --axa-card-overlay: rgba(52, 60, 61, 0.72); /* F12 : voile de la Light Card */
-    --axa-card-radius: 8px; /* F12 : coins du voile de la Light Card */
+    --axa-card-font: 'Source Sans 3', 'Source Sans Pro', Arial, sans-serif; 
+    --axa-card-text: #343c3d; 
+    --axa-card-subhead: #e3000a; 
+    --axa-card-date: #606776; 
+    --axa-card-link: #00008f; 
+    --axa-card-link-hover: #0000f7;
+    --axa-card-button: #e3000a; 
+    --axa-card-button-hover: #cc0009; 
+    --axa-card-focus: #00008f; 
+    --axa-card-inverse-bg: #00008f;
+    --axa-card-inverse-text: #ffffff;
+    --axa-card-overlay: rgba(52, 60, 61, 0.72);
+    --axa-card-radius: 8px;
 
     display: block;
     font-family: var(--axa-card-font);
@@ -67,7 +55,6 @@ export const styles = css`
     gap: 5px;
   }
 
-  /* 500px pour la grande carte avec image à droite (F12 : Large Card). */
   .card--lg.card--inverted .body {
     max-width: 500px;
   }
@@ -86,13 +73,11 @@ export const styles = css`
     max-width: 100%;
   }
 
-  /* choix : pas de story sm sur le Storybook. */
   .card--sm .image {
     width: 88px;
     height: 88px;
   }
 
-  /* F12 : Medium Card. */
   .card--md .image {
     width: 185px;
     height: 185px;
@@ -140,7 +125,6 @@ export const styles = css`
     font-weight: 700;
   }
 
-  /* choix : pas de story sm, titre plus petit comme sur la maquette PDF. */
   .card--sm .title {
     font-size: 16px;
     line-height: 20px;
@@ -152,7 +136,7 @@ export const styles = css`
     line-height: 30px;
   }
 
-  /* ---------- Liens et boutons (choix : non mesurables sur la page Storybook) ---------- */
+  /* ---------- Liens et boutons ---------- */
 
   .links {
     display: flex;
@@ -227,7 +211,7 @@ export const styles = css`
     color: var(--axa-card-link);
   }
 
-  /* ---------- isInverse : thème sombre (choix : pas de story isInverse) ---------- */
+  /* ---------- isInverse : thème sombre ---------- */
 
   .card--inverse {
     padding: 24px;

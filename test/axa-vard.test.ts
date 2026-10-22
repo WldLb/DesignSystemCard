@@ -19,6 +19,8 @@ function article(el: AxaCard): HTMLElement {
 }
 
 describe('axa-card', () => {
+
+	// Tests de l'affichage des textes de la carte : subhead, cardTitle et content.
   describe('textes', () => {
     it('affiche le subhead, le titre et le contenu', async () => {
       const el = await fixture<AxaCard>(html`
@@ -30,6 +32,7 @@ describe('axa-card', () => {
       expect(query(el, '.content')!.textContent!.trim()).to.equal('Texte de la carte');
     });
 
+		// Tests de l'affichage des éléments vides quand les props ne sont pas renseignées.
     it('n\'affiche aucun élément vide quand les props ne sont pas renseignées', async () => {
       const el = await fixture<AxaCard>(html`<axa-card></axa-card>`);
 
@@ -41,6 +44,7 @@ describe('axa-card', () => {
     });
   });
 
+	// Tests de la date de la carte.
   describe('date', () => {
     it('formate une date ISO en JJ/MM/AAAA dans une balise <time>', async () => {
       const el = await fixture<AxaCard>(html`<axa-card card-date="2021-03-21"></axa-card>`);
@@ -51,6 +55,7 @@ describe('axa-card', () => {
     });
   });
 
+	// Tests de l'image de la carte.
   describe('image', () => {
     it('donne un alt vide par défaut (image décorative)', async () => {
       const el = await fixture<AxaCard>(html`<axa-card image=${IMAGE}></axa-card>`);
@@ -59,6 +64,7 @@ describe('axa-card', () => {
     });
   });
 
+	// Tests des liens et boutons de la carte.
   describe('liens et boutons', () => {
     const links: CardLink[] = [
       {url: '/sinistre', label: 'Make a claim', type: 'link', variation: 'primary'},
@@ -77,6 +83,7 @@ describe('axa-card', () => {
     });
   });
 
+	// Tests de la classe CSS du type de carte (sm, md, lg, bg).
   describe('variantes de mise en page', () => {
     it('ajoute la classe du type (card--lg par défaut, card--md…)', async () => {
       const lg = await fixture<AxaCard>(html`<axa-card></axa-card>`);
@@ -88,6 +95,7 @@ describe('axa-card', () => {
     });
   });
 
+	// Tests de la réactivité des props avec Lit.
   describe('réactivité Lit', () => {
     it('a les valeurs par défaut du Storybook', async () => {
       const el = await fixture<AxaCard>(html`<axa-card></axa-card>`);
@@ -112,6 +120,7 @@ describe('axa-card', () => {
     });
   });
 
+	// Tests de la réactivité au redimensionnement de la carte.
   describe('responsive (breakpoint)', () => {
     it('passe en vertical quand la carte est plus étroite que le breakpoint', async () => {
       const el = await fixture<AxaCard>(html`<axa-card type="lg" style="width: 500px"></axa-card>`);
@@ -120,6 +129,7 @@ describe('axa-card', () => {
     });
   });
 
+	// Tests d'accessibilité avec axe-core.
   describe('accessibilité', () => {
     it('relie la carte à son titre avec aria-labelledby', async () => {
       const el = await fixture<AxaCard>(html`<axa-card card-title="Car Insurance"></axa-card>`);

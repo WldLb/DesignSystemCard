@@ -3,10 +3,11 @@ import {customElement, property , state} from 'lit/decorators.js';
 import {classMap} from 'lit/directives/class-map.js';
 import {styles} from './axa-card.style.js';
 
+// Types et interfaces pour la carte AXA.
 export type CardLinkType = 'link' | 'button';
 export type CardLinkVariation = 'primary' | 'secondary' | 'light';
 
-// Lien de la carte (même forme que la prop `links` du Storybook AXA).
+// Interface représentant un lien ou un bouton dans la carte.
 export interface CardLink {
   url: string;
   label: string;
@@ -21,6 +22,7 @@ export type CardType = 'sm' | 'md' | 'lg' | 'bg';
 @customElement('axa-card')
 export class AxaCard extends LitElement {
 
+  // Définition des styles CSS de la carte.
   static styles = styles;
 
   // Declation des properties
@@ -64,7 +66,7 @@ export class AxaCard extends LitElement {
     @state()
     private width = 0;
 
-
+    // Observer pour détecter les changements de largeur de la carte.
     private resizeObserver = new ResizeObserver((entries) => {
       const width = entries[0].contentRect.width;
       requestAnimationFrame(() => {
@@ -72,6 +74,7 @@ export class AxaCard extends LitElement {
       });
     });
 
+    // Lifecycle callbacks pour démarrer et arrêter l'observation de la largeur.
     connectedCallback() {
       super.connectedCallback();
       this.resizeObserver.observe(this);
@@ -87,9 +90,9 @@ export class AxaCard extends LitElement {
       return canStack && this.width > 0 && this.width < this.breakpoint;
 }
 
-  // Render the UI as a function of component state
   render() {
 
+    // Définition des classes CSS de l'article selon les props et l'état de la carte.
     const classes = {
     card: true,
     [`card--${this.type}`]: true,
@@ -120,6 +123,7 @@ export class AxaCard extends LitElement {
     return year &&  month && day ? `${day}/${month}/${year}` : date 
   }
 
+// AFFICHE UN LIEN (bouton ou lien) selon le type et la variation.  
   private renderLink({url, label, type = 'link', variation = 'primary'}: CardLink) {
 return html`
     <a class="link link--${type} link--${variation}" 
