@@ -9,16 +9,54 @@
     <script type="module" src="/src/axa-card.ts"></script>
   </head>
   <body>
-    <axa-card
-      image="https://picsum.photos/id/1067/800/500"
-      subhead="Sous titre"
-      card-title="Titre du card"
-      card-date="2021-03-21"
-      content="Test de contenu dans le card"
-      links='[
-        {"url": "#", "label": "MAKE A CLAIM", "type": "link", "variation": "primary"},
-        {"url": "#", "label": "Primary button", "type": "button", "variation": "primary"}
-      ]'
-    ></axa-card>
+      <section>
+        <form class="controls" id="controls">
+          <label>
+            type
+            <select name="type">
+              <option value="sm">sm</option>
+              <option value="md">md</option>
+              <option value="lg" selected>lg</option>
+              <option value="bg">bg</option>
+            </select>
+          </label>
+          <label><input type="checkbox" name="inverted" /> inverted</label>
+          <label><input type="checkbox" name="vertical" /> vertical</label>
+          <label><input type="checkbox" name="isInverse" /> is-inverse</label>
+          <label><input type="checkbox" name="withImage" checked /> image</label>
+        </form>
+
+        <axa-card
+          id="playground-card"
+          type="lg"
+          image="https://picsum.photos/id/1067/800/600"
+          subhead="Subhead"
+          card-date="2021-03-21"
+          card-title="This is the card title"
+          content="Some quick example text to build on the card title and make up the bulk of the card's content."
+          links='[
+            {"url": "#", "label": "MAKE A CLAIM", "type": "link", "variation": "primary"},
+            {"url": "#", "label": "Primary button", "type": "button", "variation": "primary"}
+          ]'
+        ></axa-card>
+      </section>
+
+    </main>
+
+    <script type="module">
+      // Chaque changement dans le formulaire met à jour une prop de la carte.
+      // Lit détecte le changement et redessine la carte tout seul.
+      const form = document.querySelector('#controls');
+      const card = document.querySelector('#playground-card');
+      const imageUrl = card.getAttribute('image');
+
+      form.addEventListener('input', () => {
+        card.type = form.elements.type.value;
+        card.inverted = form.elements.inverted.checked;
+        card.vertical = form.elements.vertical.checked;
+        card.isInverse = form.elements.isInverse.checked;
+        card.image = form.elements.withImage.checked ? imageUrl : '';
+      });
+    </script>
   </body>
 </html>

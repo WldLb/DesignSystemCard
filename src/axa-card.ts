@@ -1,5 +1,6 @@
 import {LitElement, html, nothing} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
+import {classMap} from 'lit/directives/class-map.js';
 import {styles} from './axa-card.style.js';
 
 export type CardLinkType = 'link' | 'button';
@@ -12,6 +13,10 @@ export interface CardLink {
   type?: CardLinkType;
   variation?: CardLinkVariation;
 }
+
+// Variante de la carte : petite, moyenne, grande, ou image en fond.
+export type CardType = 'sm' | 'md' | 'lg' | 'bg';
+
 
 @customElement('axa-card')
 export class AxaCard extends LitElement {
@@ -37,14 +42,35 @@ export class AxaCard extends LitElement {
   // Texte alternatif de l'image. Vide par défaut :
     @property({attribute: 'image-alt'})
     imageAlt = '';
-    
-  @property({type: Array})
-  links: CardLink[] = [];
+
+    @property()
+    type: CardType = 'lg';
+
+    @property({type: Boolean})
+    inverted = false;
+
+    @property({type: Boolean})
+    vertical = false;
+
+    @property({type: Boolean, attribute: 'is-inverse'})
+    isInverse = false;
+
+    @property({type: Array})
+    links: CardLink[] = [];
 
   // Render the UI as a function of component state
   render() {
+
+    const classes = {
+    card: true,
+    [`card--${this.type}`]: true,
+    'card--inverted': this.inverted,
+    'card--vertical': this.vertical,
+    'card--inverse': this.isInverse,
+    };
+
     return html`
-        <article class="card" aria-labelledby=${this.cardTitle ? 'card-title' : nothing}>
+        <article class=${classMap(classes)} aria-labelledby=${this.cardTitle ? 'card-title' : nothing}>
             ${this.image
             ? html`<img class="image" src=${this.image} alt=${this.imageAlt} loading="lazy" />`
             : nothing}
@@ -53,7 +79,7 @@ export class AxaCard extends LitElement {
                 ${this.cardDate ? html `
                         <time datetime=${this.cardDate}>${this.fomateDate(this.cardDate)}</time>
                         ` : nothing}
-                ${this.cardTitle ? html `<h2 d="card-title" class="title"> ${this.cardTitle}</h2>` : nothing}
+                ${this.cardTitle ? html `<h2 id="card-title" class="title"> ${this.cardTitle}</h2>` : nothing}
                 ${this.content ? html `<p class="content"> ${this.content}</p>` : nothing}
                 ${this.links.length > 0
                 ? html`<div class="links">${this.links.map((link) => this.renderLink(link))}</div>`
