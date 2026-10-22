@@ -1,25 +1,22 @@
-import {LitElement, css, html, nothing} from 'lit';
+import {LitElement, html, nothing} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
+import {styles} from './axa-card.style.js';
+
+export type CardLinkType = 'link' | 'button';
+export type CardLinkVariation = 'primary' | 'secondary' | 'light';
+
+// Lien de la carte (même forme que la prop `links` du Storybook AXA).
+export interface CardLink {
+  url: string;
+  label: string;
+  type?: CardLinkType;
+  variation?: CardLinkVariation;
+}
 
 @customElement('axa-card')
 export class AxaCard extends LitElement {
-  // Define scoped styles right with your component, in plain CSS
-  static styles = css`
-    :host {
-      display: block;
-    }
 
-    //Sans cette règle, display: block ci-dessus empêcherait l'attribut hidden de masquer la carte.
-    :host([hidden]) {
-      display : none,
-    }
-
-    .image {
-      display: block;
-      width: 100%;
-      height: auto;
-    }
-  `;
+  static styles = styles;
 
   // Declation des properties
     @property({type: String})
@@ -41,6 +38,8 @@ export class AxaCard extends LitElement {
     @property({attribute: 'image-alt'})
     imageAlt = '';
     
+  @property({type: Array})
+  links: CardLink[] = [];
 
   // Render the UI as a function of component state
   render() {
@@ -56,6 +55,9 @@ export class AxaCard extends LitElement {
                         ` : nothing}
                 ${this.cardTitle ? html `<h2 d="card-title" class="title"> ${this.cardTitle}</h2>` : nothing}
                 ${this.content ? html `<p class="content"> ${this.content}</p>` : nothing}
+                ${this.links.length > 0
+                ? html`<div class="links">${this.links.map((link) => this.renderLink(link))}</div>`
+                : nothing}
             </div>
         </article>
     `;
@@ -64,6 +66,10 @@ export class AxaCard extends LitElement {
   private fomateDate(date : string) : string {
     const [year , month , day] = date.split('-');
     return year &&  month && day ? `${day}/${month}/${year}` : date 
+  }
+
+  private renderLink({url, label, type = 'link', variation = 'primary'}: CardLink) {
+    return html`<a class="link link--${type} link--${variation}" href=${url}>${label}</a>`;
   }
 }
 
