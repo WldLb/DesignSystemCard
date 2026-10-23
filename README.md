@@ -124,7 +124,7 @@ interface CardLink {
 
 | `type` | Rendu |
 |---|---|
-| `link` | lien texte en majuscules, avec une flèche décorative |
+| `link` | lien texte en majuscules|
 | `button` | lien à l'apparence d'un bouton (forme de pilule) |
 
 | `variation` | Rendu |
@@ -192,7 +192,7 @@ L'observateur est branché dans `connectedCallback` et débranché dans `disconn
   « article, *titre* ».
 - **Image** : `alt` vide par défaut (image décorative, ignorée par les lecteurs d'écran). On renseigne `image-alt`
   seulement si l'image apporte une information que le texte ne donne pas.
-- **Éléments décoratifs** : le séparateur `-` et la flèche des liens ont `aria-hidden="true"`.
+- **Éléments décoratifs** : le séparateur `-` des liens ont `aria-hidden="true"`.
 - **Liens** : toujours de vrais `<a href>` (voir [Choix de conception](#choix-de-conception)).
 - **Focus clavier** : contour visible avec `:focus-visible` (blanc sur fond sombre).
 - **Contraste** : bouton rouge `#e3000a` (texte blanc ≈ 4,92:1, niveau AA) ; voile sombre sous le texte de la
@@ -297,14 +297,14 @@ pour les Web Components. Outils :
 | [@open-wc/testing](https://open-wc.org/docs/testing/testing-package/) | `fixture`, `expect` (Chai), `waitUntil`, audit axe |
 | `@web/dev-server-esbuild` | compile le TypeScript à la volée, en lisant `tsconfig.json` (décorateurs) |
 
-**17 tests**, regroupés par fonctionnalité :
+**16 tests**, regroupés par fonctionnalité :
 
 | Fonctionnalité | Ce qui est vérifié |
 |---|---|
 | Textes | surtitre, titre et contenu affichés ; aucun élément vide quand les propriétés ne sont pas renseignées |
 | Date | `2021-03-21` affichée `21/03/2021` dans une balise `<time datetime="2021-03-21">` ; une date non ISO est affichée telle quelle ; le séparateur n'apparaît qu'avec un surtitre et une date |
 | Image | `alt` vide par défaut (image décorative) |
-| Liens et boutons | un `<a href>` par lien, avec son libellé ; flèche seulement pour `type: "link"` ; liens lus depuis l'attribut JSON |
+| Liens et boutons | un `<a href>` par lien, avec son libellé ; liens lus depuis l'attribut JSON |
 | Variantes | classe du type sur la carte (`card--lg` par défaut, `card--md`…) ; `inverted` ignoré sans image ; rendu mis à jour quand une propriété change |
 | Responsive | une carte plus étroite que le `breakpoint` passe en vertical ; `breakpoint="0"` désactive le responsive ; les cartes `sm` et `bg` ne changent pas |
 | Accessibilité | `aria-labelledby` pointe vers le titre ; audit axe sans erreur sur une carte complète |

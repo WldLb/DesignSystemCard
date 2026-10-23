@@ -122,8 +122,7 @@ export class AxaCard extends LitElement {
 
   // Toujours un <a> : la carte mène vers une page, type 'button' ne change que l'apparence.
   private renderLink({url, label, type = 'link', variation = 'primary'}: CardLink) {
-    const arrow = type === 'link' ? html`<span class="arrow" aria-hidden="true">→</span>` : nothing;
-    return html`<a class="link link--${type} link--${variation}" href=${url}>${label}${arrow}</a>`;
+    return html`<a class="link link--${type} link--${variation}" href=${url}>${label}</a>`;
   }
 
   private renderMeta() {

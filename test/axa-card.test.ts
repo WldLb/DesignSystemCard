@@ -103,14 +103,6 @@ describe('axa-card', () => {
       expect(anchors[1].textContent).to.contain('Get a quote');
     });
 
-    it('affiche la flèche seulement pour les liens de type "link"', async () => {
-      const el = await fixture<AxaCard>(html`<axa-card .links=${links}></axa-card>`);
-      const anchors = el.shadowRoot!.querySelectorAll('a');
-
-      expect(anchors[0].querySelectorAll('.arrow').length).to.equal(1);
-      expect(anchors[1].querySelectorAll('.arrow').length).to.equal(0);
-    });
-
     it("lit les liens écrits en JSON dans l'attribut HTML", async () => {
       const el = await fixture<AxaCard>(html`
         <axa-card links='[{"url": "/sinistre", "label": "Make a claim"}]'></axa-card>

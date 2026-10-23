@@ -159,11 +159,8 @@ export const styles = css`
     outline-offset: 3px;
   }
 
-  /* Lien texte, avec flèche. */
+  /* Lien texte */
   .link--link {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
     color: var(--axa-card-link);
   }
 
