@@ -229,14 +229,14 @@ L'observateur est branché dans `connectedCallback` et débranché dans `disconn
 
 Les valeurs de style ont été relevées sur la page Card du
 [Storybook AXA officiel](https://storybook.designsystem.axa.com/docs/storybook/?path=/docs/react-one-ds-beta-card--docs),
-avec l'inspecteur du navigateur (**F12 → onglet Calculé**), sur les stories **Default**, **Medium Card**,
+avec l'inspecteur du navigateur, sur les stories **Default**, **Medium Card**,
 **Large Card** et **Light Card**.
 
 Seules les valeurs visibles à l'inspecteur ont été reprises : le code source du Storybook n'a pas été copié.
 Les deux tableaux ci-dessous donnent l'origine de chaque valeur : relevée à l'inspecteur, ou choisie d'après la
 maquette du PDF « Cards v1.2.0 » quand elle n'était pas mesurable.
 
-### Valeurs relevées sur le Storybook (F12)
+### Valeurs relevées sur le Storybook
 
 | Élément | Valeur | Story |
 |---|---|---|
