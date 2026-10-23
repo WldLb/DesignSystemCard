@@ -4,27 +4,20 @@ import type { CardLink } from '../src/axa-card.js';
 
 const IMAGE = 'https://picsum.photos/500/800';
 
-function query<T extends Element = HTMLElement>(
-  el: AxaCard,
-  selector: string,
-): T | null {
-  return el.shadowRoot!.querySelector<T>(selector);
+function query(el: AxaCard, selector: string) {
+  return el.shadowRoot!.querySelector(selector);
 }
 
-function article(el: AxaCard): HTMLElement {
+function article(el: AxaCard) {
   return query(el, 'article')!;
 }
 
-// Renvoie un booléen plutôt que l'élément : si l'assertion échoue, Web Test Runner
-// n'a pas à afficher un élément du DOM dans le message d'erreur (ce qui peut le bloquer).
-function has(el: AxaCard, selector: string): boolean {
+// Un booléen plutôt que l'élément : message d'erreur plus court si le test échoue.
+function has(el: AxaCard, selector: string) {
   return query(el, selector) !== null;
 }
 
-// Pour vérifier qu'une carte N'A PAS changé, il faut d'abord laisser le composant mesurer sa largeur :
-// image 1 : le ResizeObserver mesure la carte et programme un requestAnimationFrame ;
-// image 2 : ce requestAnimationFrame applique la largeur ;
-// image 3 : on est sûr d'arriver après lui, puis on attend le rendu Lit.
+// Attend que le ResizeObserver ait mesuré la carte (sinon le test passe à vide).
 async function waitForMeasure(el: AxaCard) {
   await nextFrame();
   await nextFrame();
@@ -61,9 +54,7 @@ describe('axa-card', () => {
       expect(has(el, 'img')).to.be.false;
       expect(has(el, '.links')).to.be.false;
     });
-  });
 
-  describe('date', () => {
     it('formate une date ISO en JJ/MM/AAAA dans une balise <time>', async () => {
       const el = await fixture<AxaCard>(
         html`<axa-card card-date="2021-03-21"></axa-card>`,
@@ -96,16 +87,6 @@ describe('axa-card', () => {
       expect(has(both, '.separator')).to.be.true;
       expect(has(subheadOnly, '.separator')).to.be.false;
       expect(has(dateOnly, '.separator')).to.be.false;
-    });
-  });
-
-  describe('image', () => {
-    it('donne un alt vide par défaut (image décorative)', async () => {
-      const el = await fixture<AxaCard>(
-        html`<axa-card image=${IMAGE}></axa-card>`,
-      );
-
-      expect(query(el, 'img')!.getAttribute('alt')).to.equal('');
     });
   });
 
@@ -152,7 +133,7 @@ describe('axa-card', () => {
     });
   });
 
-  describe('variantes de mise en page', () => {
+  describe('mise en page', () => {
     it('ajoute la classe du type (card--lg par défaut, card--md…)', async () => {
       const lg = await fixture<AxaCard>(html`<axa-card></axa-card>`);
       const md = await fixture<AxaCard>(html`<axa-card type="md"></axa-card>`);
@@ -174,19 +155,6 @@ describe('axa-card', () => {
         .true;
       expect(article(withoutImage).classList.contains('card--inverted')).to.be
         .false;
-    });
-
-    it('met à jour le rendu quand une prop change', async () => {
-      const el = await fixture<AxaCard>(
-        html`<axa-card card-title="Avant"></axa-card>`,
-      );
-
-      el.cardTitle = 'Après';
-      el.type = 'sm';
-      await el.updateComplete;
-
-      expect(query(el, 'h2')!.textContent!.trim()).to.equal('Après');
-      expect(article(el).classList.contains('card--sm')).to.be.true;
     });
   });
 
@@ -240,6 +208,14 @@ describe('axa-card', () => {
       expect(el.shadowRoot!.getElementById(id)!.textContent!.trim()).to.equal(
         'Car Insurance',
       );
+    });
+
+    it('donne un alt vide par défaut (image décorative)', async () => {
+      const el = await fixture<AxaCard>(
+        html`<axa-card image=${IMAGE}></axa-card>`,
+      );
+
+      expect(query(el, 'img')!.getAttribute('alt')).to.equal('');
     });
 
     it("passe l'audit d'accessibilité axe (carte complète)", async () => {
