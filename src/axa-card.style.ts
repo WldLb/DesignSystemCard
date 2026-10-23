@@ -2,18 +2,14 @@ import { css } from 'lit';
 
 export const styles = css`
   :host {
-    /* ---------- Tokens AXA ---------- */
     --axa-card-font: 'Source Sans 3', 'Source Sans Pro', Arial, sans-serif;
     --axa-card-text: #343c3d;
-    --axa-card-subhead: #e3000a;
-    --axa-card-date: #606776;
-    --axa-card-link: #00008f;
-    --axa-card-link-hover: #0000f7;
-    --axa-card-button: #e3000a;
-    --axa-card-button-hover: #cc0009;
-    --axa-card-focus: #00008f;
-    --axa-card-inverse-bg: #00008f;
-    --axa-card-inverse-text: #ffffff;
+    --axa-card-muted: #606776;
+    --axa-card-red: #e3000a;
+    --axa-card-red-hover: #cc0009;
+    --axa-card-blue: #00008f;
+    --axa-card-blue-hover: #0000f7;
+    --axa-card-white: #ffffff;
     --axa-card-overlay: rgba(52, 60, 61, 0.72);
     --axa-card-radius: 8px;
 
@@ -22,12 +18,10 @@ export const styles = css`
     color: var(--axa-card-text);
   }
 
-  /* Sans cette règle, display: block ci-dessus empêcherait l'attribut hidden de masquer la carte. */
+  /* Sinon display: block l'emporte sur l'attribut hidden. */
   :host([hidden]) {
     display: none;
   }
-
-  /* ---------- Mise en page ---------- */
 
   .card {
     display: flex;
@@ -35,12 +29,10 @@ export const styles = css`
     gap: 24px;
   }
 
-  /* inverted : image à droite. */
   .card--inverted {
     flex-direction: row-reverse;
   }
 
-  /* vertical : image au-dessus du texte. */
   .card--vertical {
     flex-direction: column;
     align-items: stretch;
@@ -62,8 +54,6 @@ export const styles = css`
   .card--vertical .body {
     max-width: none;
   }
-
-  /* ---------- Image : une taille par type ---------- */
 
   .image {
     display: block;
@@ -95,7 +85,6 @@ export const styles = css`
     height: 264px;
   }
 
-  /* ---------- Textes ---------- */
   .meta {
     display: flex;
     flex-wrap: wrap;
@@ -109,12 +98,12 @@ export const styles = css`
   }
 
   .subhead {
-    color: var(--axa-card-subhead);
+    color: var(--axa-card-red);
   }
 
   .separator,
   .date {
-    color: var(--axa-card-date);
+    color: var(--axa-card-muted);
   }
 
   .title {
@@ -135,8 +124,6 @@ export const styles = css`
     line-height: 30px;
   }
 
-  /* ---------- Liens et boutons ---------- */
-
   .links {
     display: flex;
     flex-direction: column;
@@ -152,71 +139,61 @@ export const styles = css`
     text-decoration: none;
   }
 
-  /* Contour visible quand un lien reçoit le focus au clavier (Tab). */
   .link:focus-visible {
-    outline: 2px solid var(--axa-card-focus);
+    outline: 2px solid var(--axa-card-blue);
     outline-offset: 3px;
   }
 
-  /* Lien texte */
   .link--link {
-    color: var(--axa-card-link);
+    color: var(--axa-card-blue);
   }
 
   .link--link:hover {
-    color: var(--axa-card-link-hover);
+    color: var(--axa-card-blue-hover);
     text-decoration: underline;
   }
 
-  /* Lien qui a l'apparence d'un bouton (reste un <a>) : forme de pilule. */
   .link--button {
     display: inline-block;
     padding: 12px 24px;
-    border: 1px solid var(--axa-card-button);
+    border: 1px solid var(--axa-card-red);
     border-radius: 999px;
     max-width: 100%;
   }
 
-  /* primary : rouge plein. */
   .link--button.link--primary {
-    background: var(--axa-card-button);
-    color: #ffffff;
+    background: var(--axa-card-red);
+    color: var(--axa-card-white);
   }
 
-  /* secondary : contour rouge, fond transparent. */
   .link--button.link--secondary {
     background: transparent;
-    color: var(--axa-card-button);
+    color: var(--axa-card-red);
   }
 
   .link--button.link--primary:hover,
   .link--button.link--secondary:hover {
-    background: var(--axa-card-button-hover);
-    border-color: var(--axa-card-button-hover);
-    color: #ffffff;
+    background: var(--axa-card-red-hover);
+    border-color: var(--axa-card-red-hover);
+    color: var(--axa-card-white);
   }
 
-  /* light : version blanche, pour les fonds sombres. */
   .link--light {
-    color: var(--axa-card-inverse-text);
-    border-color: var(--axa-card-inverse-text);
+    color: var(--axa-card-white);
+    border-color: var(--axa-card-white);
   }
 
   .link--button.link--light:hover {
-    background: var(--axa-card-inverse-text);
-    color: var(--axa-card-link);
+    background: var(--axa-card-white);
+    color: var(--axa-card-blue);
   }
-
-  /* ---------- isInverse : thème sombre ---------- */
 
   .card--inverse {
     padding: 24px;
     border-radius: var(--axa-card-radius);
-    background: var(--axa-card-inverse-bg);
-    color: var(--axa-card-inverse-text);
+    background: var(--axa-card-blue);
+    color: var(--axa-card-white);
   }
-
-  /* ---------- type bg : image en fond, texte par-dessus ---------- */
 
   .card--bg {
     position: relative;
@@ -225,7 +202,7 @@ export const styles = css`
     min-height: 264px;
     padding: 24px;
     border-radius: var(--axa-card-radius);
-    color: var(--axa-card-inverse-text);
+    color: var(--axa-card-white);
   }
 
   .card--bg .image {
@@ -236,7 +213,7 @@ export const styles = css`
     border-radius: 0;
   }
 
-  /* Voile sombre entre l'image et le texte, pour garder un bon contraste. */
+  /* Voile sombre entre l'image et le texte, pour le contraste. */
   .card--bg::before {
     content: '';
     position: absolute;
@@ -250,7 +227,6 @@ export const styles = css`
     z-index: 2;
   }
 
-  /* Sur fond sombre (inverse ou bg), les textes colorés et les liens texte passent en blanc. */
   .card--inverse .subhead,
   .card--inverse .separator,
   .card--inverse .date,
@@ -259,11 +235,11 @@ export const styles = css`
   .card--bg .separator,
   .card--bg .date,
   .card--bg .link--link {
-    color: var(--axa-card-inverse-text);
+    color: var(--axa-card-white);
   }
 
   .card--inverse .link:focus-visible,
   .card--bg .link:focus-visible {
-    outline-color: var(--axa-card-inverse-text);
+    outline-color: var(--axa-card-white);
   }
 `;

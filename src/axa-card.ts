@@ -3,15 +3,11 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { styles } from './axa-card.style.js';
 
-// Types union plutôt qu'enum : erasableSyntaxOnly (tsconfig) interdit les enum.
-export type CardLinkType = 'link' | 'button';
-export type CardLinkVariation = 'primary' | 'secondary' | 'light';
-
 export interface CardLink {
   url: string;
   label: string;
-  type?: CardLinkType;
-  variation?: CardLinkVariation;
+  type?: 'link' | 'button';
+  variation?: 'primary' | 'secondary' | 'light';
 }
 
 export type CardType = 'sm' | 'md' | 'lg' | 'bg';
@@ -23,7 +19,7 @@ export class AxaCard extends LitElement {
   @property()
   subhead = '';
 
-  // Pas « title » : c'est un attribut HTML natif (info-bulle au survol).
+  // Pas « title » : attribut HTML natif (info-bulle au survol).
   @property({ attribute: 'card-title' })
   cardTitle = '';
 
@@ -36,7 +32,7 @@ export class AxaCard extends LitElement {
   @property()
   image = '';
 
-  // Vide par défaut : l'image est décorative et ignorée par les lecteurs d'écran.
+  // Vide par défaut : image décorative, ignorée par les lecteurs d'écran.
   @property({ attribute: 'image-alt' })
   imageAlt = '';
 
@@ -58,13 +54,10 @@ export class AxaCard extends LitElement {
   @property({ type: Number })
   breakpoint = 750;
 
-  // État interne : la largeur mesurée n'est pas une API publique.
   @state()
   private width = 0;
 
-  // On mesure la carte elle-même, pas la fenêtre : elle s'adapte à son conteneur.
-  // requestAnimationFrame : changer la mise en page pendant la mesure déclencherait
-  // l'erreur « ResizeObserver loop completed with undelivered notifications ».
+  // Mesure la carte, pas la fenêtre ; rAF pour éviter l'erreur de boucle du ResizeObserver.
   private resizeObserver = new ResizeObserver((entries) => {
     const width = entries[0].contentRect.width;
     requestAnimationFrame(() => {
@@ -128,7 +121,7 @@ export class AxaCard extends LitElement {
     `;
   }
 
-  // 'AAAA-MM-JJ' à 'JJ/MM/AAAA', découpé à la main .  Une date non ISO est affichée telle quelle.
+  // Pas de new Date() : il lit la date en UTC et peut afficher la veille.
   private formatDate(date: string): string {
     const [year, month, day] = date.split('-');
     return year && month && day ? `${day}/${month}/${year}` : date;
