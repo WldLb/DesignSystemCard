@@ -46,13 +46,13 @@ npm install
 npx playwright install chromium   # navigateur utilisé par les tests
 ```
 
-| Commande | Rôle |
-|---|---|
-| `npm run dev` | lance le serveur Vite et ouvre le playground sur http://localhost:5173 |
-| `npm test` | lance les tests unitaires dans Chromium (Web Test Runner) |
-| `npm run test:watch` | relance les tests à chaque modification |
-| `npm run build` | vérifie les types (`tsc`) puis construit le projet dans `dist/` |
-| `npm run preview` | sert le résultat de `npm run build` |
+| Commande             | Rôle                                                                   |
+| -------------------- | ---------------------------------------------------------------------- |
+| `npm run dev`        | lance le serveur Vite et ouvre le playground sur http://localhost:5173 |
+| `npm test`           | lance les tests unitaires dans Chromium (Web Test Runner)              |
+| `npm run test:watch` | relance les tests à chaque modification                                |
+| `npm run build`      | vérifie les types (`tsc`) puis construit le projet dans `dist/`        |
+| `npm run preview`    | sert le résultat de `npm run build`                                    |
 
 ### Interface de Preview
 
@@ -85,29 +85,28 @@ Les propriétés se règlent aussi en JavaScript ; c'est la façon la plus simpl
 
 ```js
 const card = document.querySelector('axa-card');
-card.links = [{url: '/sinistre', label: 'Make a claim'}];
+card.links = [{ url: '/sinistre', label: 'Make a claim' }];
 card.isInverse = true;
 ```
 
 Dans un template Lit, on passe le tableau directement avec la syntaxe de propriété : `<axa-card .links=${links}>`.
 
-
 ## Propriétés
 
-| Propriété | Attribut HTML | Type | Défaut | Description |
-|---|---|---|---|---|
-| `type` | `type` | `'sm' \| 'md' \| 'lg' \| 'bg'` | `'lg'` | variante : petite, moyenne, grande, ou image en fond |
-| `inverted` | `inverted` | `boolean` | `false` | image à droite (ignoré s'il n'y a pas d'image) |
-| `vertical` | `vertical` | `boolean` | `false` | image au-dessus du texte |
-| `isInverse` | `is-inverse` | `boolean` | `false` | thème sombre : fond bleu AXA, textes en blanc |
-| `image` | `image` | `string` | `''` | URL de l'image ; sans image, la carte est une carte texte |
-| `imageAlt` | `image-alt` | `string` | `''` | texte alternatif ; vide = image décorative |
-| `subhead` | `subhead` | `string` | `''` | surtitre, en rouge et en majuscules |
-| `cardTitle` | `card-title` | `string` | `''` | titre principal (`<h2>`) |
-| `cardDate` | `card-date` | `string` | `''` | date au format ISO `AAAA-MM-JJ`, affichée en `JJ/MM/AAAA` |
-| `content` | `content` | `string` | `''` | texte du corps |
-| `links` | `links` (JSON) | `CardLink[]` | `[]` | liens et boutons affichés après le contenu |
-| `breakpoint` | `breakpoint` | `number` | `750` | largeur en px sous laquelle les cartes `md` et `lg` passent en vertical ; `0` désactive le responsive |
+| Propriété    | Attribut HTML  | Type                           | Défaut  | Description                                                                                           |
+| ------------ | -------------- | ------------------------------ | ------- | ----------------------------------------------------------------------------------------------------- |
+| `type`       | `type`         | `'sm' \| 'md' \| 'lg' \| 'bg'` | `'lg'`  | variante : petite, moyenne, grande, ou image en fond                                                  |
+| `inverted`   | `inverted`     | `boolean`                      | `false` | image à droite (ignoré s'il n'y a pas d'image)                                                        |
+| `vertical`   | `vertical`     | `boolean`                      | `false` | image au-dessus du texte                                                                              |
+| `isInverse`  | `is-inverse`   | `boolean`                      | `false` | thème sombre : fond bleu AXA, textes en blanc                                                         |
+| `image`      | `image`        | `string`                       | `''`    | URL de l'image ; sans image, la carte est une carte texte                                             |
+| `imageAlt`   | `image-alt`    | `string`                       | `''`    | texte alternatif ; vide = image décorative                                                            |
+| `subhead`    | `subhead`      | `string`                       | `''`    | surtitre, en rouge et en majuscules                                                                   |
+| `cardTitle`  | `card-title`   | `string`                       | `''`    | titre principal (`<h2>`)                                                                              |
+| `cardDate`   | `card-date`    | `string`                       | `''`    | date au format ISO `AAAA-MM-JJ`, affichée en `JJ/MM/AAAA`                                             |
+| `content`    | `content`      | `string`                       | `''`    | texte du corps                                                                                        |
+| `links`      | `links` (JSON) | `CardLink[]`                   | `[]`    | liens et boutons affichés après le contenu                                                            |
+| `breakpoint` | `breakpoint`   | `number`                       | `750`   | largeur en px sous laquelle les cartes `md` et `lg` passent en vertical ; `0` désactive le responsive |
 
 Chaque élément n'est affiché que si sa propriété est renseignée : aucune balise vide n'est créée.
 
@@ -117,38 +116,38 @@ Chaque élément n'est affiché que si sa propriété est renseignée : aucune b
 interface CardLink {
   url: string;
   label: string;
-  type?: 'link' | 'button';                      // défaut : 'link'
+  type?: 'link' | 'button'; // défaut : 'link'
   variation?: 'primary' | 'secondary' | 'light'; // défaut : 'primary'
 }
 ```
 
-| `type` | Rendu |
-|---|---|
-| `link` | lien texte en majuscules|
+| `type`   | Rendu                                            |
+| -------- | ------------------------------------------------ |
+| `link`   | lien texte en majuscules                         |
 | `button` | lien à l'apparence d'un bouton (forme de pilule) |
 
-| `variation` | Rendu |
-|---|---|
-| `primary` | lien bleu AXA / bouton rouge plein |
-| `secondary` | bouton à contour rouge |
-| `light` | version blanche, pour les fonds sombres (`is-inverse`, `bg`) |
+| `variation` | Rendu                                                        |
+| ----------- | ------------------------------------------------------------ |
+| `primary`   | lien bleu AXA / bouton rouge plein                           |
+| `secondary` | bouton à contour rouge                                       |
+| `light`     | version blanche, pour les fonds sombres (`is-inverse`, `bg`) |
 
 ### CSS custom properties
 
 Le Shadow DOM isole les styles de la carte. Pour la personnaliser depuis la page, on redéfinit ces variables :
 
-| Variable | Défaut | Rôle |
-|---|---|---|
-| `--axa-card-font` | `'Source Sans 3', 'Source Sans Pro', Arial, sans-serif` | police |
-| `--axa-card-text` | `#343c3d` | titre et contenu |
-| `--axa-card-subhead` | `#e3000a` | surtitre |
-| `--axa-card-date` | `#606776` | date et séparateur |
-| `--axa-card-link` / `--axa-card-link-hover` | `#00008f` / `#0000f7` | liens texte |
-| `--axa-card-button` / `--axa-card-button-hover` | `#e3000a` / `#cc0009` | boutons |
-| `--axa-card-focus` | `#00008f` | contour du focus clavier |
-| `--axa-card-inverse-bg` / `--axa-card-inverse-text` | `#00008f` / `#ffffff` | thème sombre |
-| `--axa-card-overlay` | `rgba(52, 60, 61, 0.72)` | voile de la variante `bg` |
-| `--axa-card-radius` | `8px` | coins arrondis |
+| Variable                                            | Défaut                                                  | Rôle                      |
+| --------------------------------------------------- | ------------------------------------------------------- | ------------------------- |
+| `--axa-card-font`                                   | `'Source Sans 3', 'Source Sans Pro', Arial, sans-serif` | police                    |
+| `--axa-card-text`                                   | `#343c3d`                                               | titre et contenu          |
+| `--axa-card-subhead`                                | `#e3000a`                                               | surtitre                  |
+| `--axa-card-date`                                   | `#606776`                                               | date et séparateur        |
+| `--axa-card-link` / `--axa-card-link-hover`         | `#00008f` / `#0000f7`                                   | liens texte               |
+| `--axa-card-button` / `--axa-card-button-hover`     | `#e3000a` / `#cc0009`                                   | boutons                   |
+| `--axa-card-focus`                                  | `#00008f`                                               | contour du focus clavier  |
+| `--axa-card-inverse-bg` / `--axa-card-inverse-text` | `#00008f` / `#ffffff`                                   | thème sombre              |
+| `--axa-card-overlay`                                | `rgba(52, 60, 61, 0.72)`                                | voile de la variante `bg` |
+| `--axa-card-radius`                                 | `8px`                                                   | coins arrondis            |
 
 ```css
 axa-card {
@@ -158,17 +157,17 @@ axa-card {
 
 ## Cas d'usage couverts
 
-| Cas d'usage (Storybook AXA) | Propriétés |
-|---|---|
-| Story **Default** | `type="lg"` + un lien |
-| Story **Medium Card** | `type="md" inverted` + deux boutons `secondary` |
-| Story **Large Card** | `type="lg" inverted` + un lien `secondary` |
-| Story **Light Card** | `type="bg"` + un bouton `light` |
-| Petite carte (vignette, surtitre, titre, date) | `type="sm"` |
-| Image au-dessus du texte | `vertical` |
-| Thème sombre | `is-inverse` + liens `variation: "light"` |
-| Carte texte seule | sans `image` |
-| Carte avec boutons | `links` avec `type: "button"` |
+| Cas d'usage (Storybook AXA)                    | Propriétés                                      |
+| ---------------------------------------------- | ----------------------------------------------- |
+| Story **Default**                              | `type="lg"` + un lien                           |
+| Story **Medium Card**                          | `type="md" inverted` + deux boutons `secondary` |
+| Story **Large Card**                           | `type="lg" inverted` + un lien `secondary`      |
+| Story **Light Card**                           | `type="bg"` + un bouton `light`                 |
+| Petite carte (vignette, surtitre, titre, date) | `type="sm"`                                     |
+| Image au-dessus du texte                       | `vertical`                                      |
+| Thème sombre                                   | `is-inverse` + liens `variation: "light"`       |
+| Carte texte seule                              | sans `image`                                    |
+| Carte avec boutons                             | `links` avec `type: "button"`                   |
 
 ## Responsive
 
@@ -189,7 +188,7 @@ L'observateur est branché dans `connectedCallback` et débranché dans `disconn
 
 - **HTML sémantique** : la carte est un `<article>`, le titre un `<h2>`, la date un `<time datetime="AAAA-MM-JJ">`.
 - **Nom accessible** : `aria-labelledby` relie l'`<article>` à son titre ; le lecteur d'écran annonce
-  « article, *titre* ».
+  « article, _titre_ ».
 - **Image** : `alt` vide par défaut (image décorative, ignorée par les lecteurs d'écran). On renseigne `image-alt`
   seulement si l'image apporte une information que le texte ne donne pas.
 - **Éléments décoratifs** : le séparateur `-` des liens ont `aria-hidden="true"`.
@@ -238,32 +237,32 @@ maquette du PDF « Cards v1.2.0 » quand elle n'était pas mesurable.
 
 ### Valeurs relevées sur le Storybook
 
-| Élément | Valeur | Story |
-|---|---|---|
-| Police | `"Source Sans 3"` | toutes |
-| Subhead | `#e3000a`, 14px / 18px, graisse 600, majuscules, espacement des lettres 1px | toutes |
-| Date | `#606776`, 14px / 18px, graisse 600, majuscules, espacement des lettres 1px | toutes |
-| Titre | `#343c3d`, 24px / 30px, graisse 700 | toutes |
-| Contenu | `#343c3d`, 16px / 30px, graisse 400 | toutes |
-| Écart entre l'image et le texte | 24px | Default, Medium Card, Large Card |
-| Écart entre le titre et les textes | 5px | Default, Medium Card, Large Card |
-| Largeur maximale du texte | 400px (500px pour une grande carte avec l'image à droite) | Default, Medium Card / Large Card |
-| Image `lg` | 546 × 407px | Default, Large Card |
-| Image `md` | 185 × 185px | Medium Card |
-| Carte `bg` | 448 × 264px, voile `rgba(52, 60, 61, 0.72)`, coins arrondis de 8px, textes en blanc | Light Card |
-| Hauteur de l'image en affichage vertical | 264px | Light Card |
-| Image des stories | `https://picsum.photos/500/800` (reprise dans les tests) | toutes |
+| Élément                                  | Valeur                                                                              | Story                             |
+| ---------------------------------------- | ----------------------------------------------------------------------------------- | --------------------------------- |
+| Police                                   | `"Source Sans 3"`                                                                   | toutes                            |
+| Subhead                                  | `#e3000a`, 14px / 18px, graisse 600, majuscules, espacement des lettres 1px         | toutes                            |
+| Date                                     | `#606776`, 14px / 18px, graisse 600, majuscules, espacement des lettres 1px         | toutes                            |
+| Titre                                    | `#343c3d`, 24px / 30px, graisse 700                                                 | toutes                            |
+| Contenu                                  | `#343c3d`, 16px / 30px, graisse 400                                                 | toutes                            |
+| Écart entre l'image et le texte          | 24px                                                                                | Default, Medium Card, Large Card  |
+| Écart entre le titre et les textes       | 5px                                                                                 | Default, Medium Card, Large Card  |
+| Largeur maximale du texte                | 400px (500px pour une grande carte avec l'image à droite)                           | Default, Medium Card / Large Card |
+| Image `lg`                               | 546 × 407px                                                                         | Default, Large Card               |
+| Image `md`                               | 185 × 185px                                                                         | Medium Card                       |
+| Carte `bg`                               | 448 × 264px, voile `rgba(52, 60, 61, 0.72)`, coins arrondis de 8px, textes en blanc | Light Card                        |
+| Hauteur de l'image en affichage vertical | 264px                                                                               | Light Card                        |
+| Image des stories                        | `https://picsum.photos/500/800` (reprise dans les tests)                            | toutes                            |
 
 ### Valeurs choisies (non mesurables sur le Storybook)
 
-| Élément | Choix | Raison |
-|---|---|---|
-| Liens et boutons | lien bleu AXA `#00008f` en majuscules, bouton rouge `#e3000a` en forme de pilule | sur le Storybook, les liens et boutons de la carte gardent le style par défaut du navigateur |
-| Rouge des boutons | `#e3000a` plutôt que `#ff1721` | contraste du texte blanc ≈ 4,92:1 contre 3,9:1 : seul `#e3000a` atteint le niveau AA des WCAG (4,5:1) |
-| Carte `sm` | image de 88 × 88px, titre de 16px | pas de story `sm` ; proportions reprises de la maquette PDF |
-| Thème sombre (`is-inverse`) | fond bleu AXA `#00008f`, textes en blanc | pas de story `isInverse` |
-| Marge intérieure de la carte `bg` | 24px | sur le Storybook, le texte est presque collé au bord |
-| Focus clavier | contour de 2px, bleu AXA (blanc sur fond sombre) | non visible sur le Storybook ; exigé par les WCAG (critère 2.4.7) |
+| Élément                           | Choix                                                                            | Raison                                                                                                |
+| --------------------------------- | -------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| Liens et boutons                  | lien bleu AXA `#00008f` en majuscules, bouton rouge `#e3000a` en forme de pilule | sur le Storybook, les liens et boutons de la carte gardent le style par défaut du navigateur          |
+| Rouge des boutons                 | `#e3000a` plutôt que `#ff1721`                                                   | contraste du texte blanc ≈ 4,92:1 contre 3,9:1 : seul `#e3000a` atteint le niveau AA des WCAG (4,5:1) |
+| Carte `sm`                        | image de 88 × 88px, titre de 16px                                                | pas de story `sm` ; proportions reprises de la maquette PDF                                           |
+| Thème sombre (`is-inverse`)       | fond bleu AXA `#00008f`, textes en blanc                                         | pas de story `isInverse`                                                                              |
+| Marge intérieure de la carte `bg` | 24px                                                                             | sur le Storybook, le texte est presque collé au bord                                                  |
+| Focus clavier                     | contour de 2px, bleu AXA (blanc sur fond sombre)                                 | non visible sur le Storybook ; exigé par les WCAG (critère 2.4.7)                                     |
 
 ### Police
 
@@ -290,24 +289,24 @@ npm test
 Les tests tournent dans un **vrai navigateur** (Chromium via Playwright), comme le recommande la documentation Lit
 pour les Web Components. Outils :
 
-| Outil | Rôle |
-|---|---|
-| [Web Test Runner](https://modern-web.dev/docs/test-runner/overview/) | lance Chromium et exécute les fichiers `test/**/*.test.ts` |
-| Mocha (framework par défaut de Web Test Runner) | `describe`, `it` |
-| [@open-wc/testing](https://open-wc.org/docs/testing/testing-package/) | `fixture`, `expect` (Chai), `waitUntil`, audit axe |
-| `@web/dev-server-esbuild` | compile le TypeScript à la volée, en lisant `tsconfig.json` (décorateurs) |
+| Outil                                                                 | Rôle                                                                      |
+| --------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| [Web Test Runner](https://modern-web.dev/docs/test-runner/overview/)  | lance Chromium et exécute les fichiers `test/**/*.test.ts`                |
+| Mocha (framework par défaut de Web Test Runner)                       | `describe`, `it`                                                          |
+| [@open-wc/testing](https://open-wc.org/docs/testing/testing-package/) | `fixture`, `expect` (Chai), `waitUntil`, audit axe                        |
+| `@web/dev-server-esbuild`                                             | compile le TypeScript à la volée, en lisant `tsconfig.json` (décorateurs) |
 
 **16 tests**, regroupés par fonctionnalité :
 
-| Fonctionnalité | Ce qui est vérifié |
-|---|---|
-| Textes | surtitre, titre et contenu affichés ; aucun élément vide quand les propriétés ne sont pas renseignées |
-| Date | `2021-03-21` affichée `21/03/2021` dans une balise `<time datetime="2021-03-21">` ; une date non ISO est affichée telle quelle ; le séparateur n'apparaît qu'avec un surtitre et une date |
-| Image | `alt` vide par défaut (image décorative) |
-| Liens et boutons | un `<a href>` par lien, avec son libellé ; liens lus depuis l'attribut JSON |
-| Variantes | classe du type sur la carte (`card--lg` par défaut, `card--md`…) ; `inverted` ignoré sans image ; rendu mis à jour quand une propriété change |
-| Responsive | une carte plus étroite que le `breakpoint` passe en vertical ; `breakpoint="0"` désactive le responsive ; les cartes `sm` et `bg` ne changent pas |
-| Accessibilité | `aria-labelledby` pointe vers le titre ; audit axe sans erreur sur une carte complète |
+| Fonctionnalité   | Ce qui est vérifié                                                                                                                                                                        |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Textes           | surtitre, titre et contenu affichés ; aucun élément vide quand les propriétés ne sont pas renseignées                                                                                     |
+| Date             | `2021-03-21` affichée `21/03/2021` dans une balise `<time datetime="2021-03-21">` ; une date non ISO est affichée telle quelle ; le séparateur n'apparaît qu'avec un surtitre et une date |
+| Image            | `alt` vide par défaut (image décorative)                                                                                                                                                  |
+| Liens et boutons | un `<a href>` par lien, avec son libellé ; liens lus depuis l'attribut JSON                                                                                                               |
+| Variantes        | classe du type sur la carte (`card--lg` par défaut, `card--md`…) ; `inverted` ignoré sans image ; rendu mis à jour quand une propriété change                                             |
+| Responsive       | une carte plus étroite que le `breakpoint` passe en vertical ; `breakpoint="0"` désactive le responsive ; les cartes `sm` et `bg` ne changent pas                                         |
+| Accessibilité    | `aria-labelledby` pointe vers le titre ; audit axe sans erreur sur une carte complète                                                                                                     |
 
 Les tests qui vérifient qu'une carte **ne** passe **pas** en vertical attendent deux images d'affichage
 (`requestAnimationFrame`) : le temps que le `ResizeObserver` mesure la carte et que la largeur soit appliquée.

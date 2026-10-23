@@ -1,10 +1,13 @@
-import {fixture, html, expect, waitUntil, nextFrame} from '@open-wc/testing';
-import {AxaCard} from '../src/axa-card.js';
-import type {CardLink} from '../src/axa-card.js';
+import { fixture, html, expect, waitUntil, nextFrame } from '@open-wc/testing';
+import { AxaCard } from '../src/axa-card.js';
+import type { CardLink } from '../src/axa-card.js';
 
 const IMAGE = 'https://picsum.photos/500/800';
 
-function query<T extends Element = HTMLElement>(el: AxaCard, selector: string): T | null {
+function query<T extends Element = HTMLElement>(
+  el: AxaCard,
+  selector: string,
+): T | null {
   return el.shadowRoot!.querySelector<T>(selector);
 }
 
@@ -33,12 +36,20 @@ describe('axa-card', () => {
   describe('textes', () => {
     it('affiche le subhead, le titre et le contenu', async () => {
       const el = await fixture<AxaCard>(html`
-        <axa-card subhead="Member online" card-title="Car Insurance" content="Texte de la carte"></axa-card>
+        <axa-card
+          subhead="Member online"
+          card-title="Car Insurance"
+          content="Texte de la carte"
+        ></axa-card>
       `);
 
-      expect(query(el, '.subhead')!.textContent!.trim()).to.equal('Member online');
+      expect(query(el, '.subhead')!.textContent!.trim()).to.equal(
+        'Member online',
+      );
       expect(query(el, 'h2')!.textContent!.trim()).to.equal('Car Insurance');
-      expect(query(el, '.content')!.textContent!.trim()).to.equal('Texte de la carte');
+      expect(query(el, '.content')!.textContent!.trim()).to.equal(
+        'Texte de la carte',
+      );
     });
 
     it("n'affiche aucun élément vide quand les props ne sont pas renseignées", async () => {
@@ -54,7 +65,9 @@ describe('axa-card', () => {
 
   describe('date', () => {
     it('formate une date ISO en JJ/MM/AAAA dans une balise <time>', async () => {
-      const el = await fixture<AxaCard>(html`<axa-card card-date="2021-03-21"></axa-card>`);
+      const el = await fixture<AxaCard>(
+        html`<axa-card card-date="2021-03-21"></axa-card>`,
+      );
       const time = query(el, 'time')!;
 
       expect(time.textContent!.trim()).to.equal('21/03/2021');
@@ -62,15 +75,23 @@ describe('axa-card', () => {
     });
 
     it("affiche telle quelle une date qui n'est pas au format ISO", async () => {
-      const el = await fixture<AxaCard>(html`<axa-card card-date="11/12/2020"></axa-card>`);
+      const el = await fixture<AxaCard>(
+        html`<axa-card card-date="11/12/2020"></axa-card>`,
+      );
 
       expect(query(el, 'time')!.textContent!.trim()).to.equal('11/12/2020');
     });
 
     it('affiche le séparateur seulement quand il y a un subhead et une date', async () => {
-      const both = await fixture<AxaCard>(html`<axa-card subhead="Sub" card-date="2021-03-21"></axa-card>`);
-      const subheadOnly = await fixture<AxaCard>(html`<axa-card subhead="Sub"></axa-card>`);
-      const dateOnly = await fixture<AxaCard>(html`<axa-card card-date="2021-03-21"></axa-card>`);
+      const both = await fixture<AxaCard>(
+        html`<axa-card subhead="Sub" card-date="2021-03-21"></axa-card>`,
+      );
+      const subheadOnly = await fixture<AxaCard>(
+        html`<axa-card subhead="Sub"></axa-card>`,
+      );
+      const dateOnly = await fixture<AxaCard>(
+        html`<axa-card card-date="2021-03-21"></axa-card>`,
+      );
 
       expect(has(both, '.separator')).to.be.true;
       expect(has(subheadOnly, '.separator')).to.be.false;
@@ -80,7 +101,9 @@ describe('axa-card', () => {
 
   describe('image', () => {
     it('donne un alt vide par défaut (image décorative)', async () => {
-      const el = await fixture<AxaCard>(html`<axa-card image=${IMAGE}></axa-card>`);
+      const el = await fixture<AxaCard>(
+        html`<axa-card image=${IMAGE}></axa-card>`,
+      );
 
       expect(query(el, 'img')!.getAttribute('alt')).to.equal('');
     });
@@ -88,12 +111,24 @@ describe('axa-card', () => {
 
   describe('liens et boutons', () => {
     const links: CardLink[] = [
-      {url: '/sinistre', label: 'Make a claim', type: 'link', variation: 'primary'},
-      {url: '/devis', label: 'Get a quote', type: 'button', variation: 'secondary'},
+      {
+        url: '/sinistre',
+        label: 'Make a claim',
+        type: 'link',
+        variation: 'primary',
+      },
+      {
+        url: '/devis',
+        label: 'Get a quote',
+        type: 'button',
+        variation: 'secondary',
+      },
     ];
 
     it('affiche un <a href> par lien, avec son libellé', async () => {
-      const el = await fixture<AxaCard>(html`<axa-card .links=${links}></axa-card>`);
+      const el = await fixture<AxaCard>(
+        html`<axa-card .links=${links}></axa-card>`,
+      );
       const anchors = el.shadowRoot!.querySelectorAll('a');
 
       expect(anchors.length).to.equal(2);
@@ -105,10 +140,14 @@ describe('axa-card', () => {
 
     it("lit les liens écrits en JSON dans l'attribut HTML", async () => {
       const el = await fixture<AxaCard>(html`
-        <axa-card links='[{"url": "/sinistre", "label": "Make a claim"}]'></axa-card>
+        <axa-card
+          links='[{"url": "/sinistre", "label": "Make a claim"}]'
+        ></axa-card>
       `);
 
-      expect(el.links).to.deep.equal([{url: '/sinistre', label: 'Make a claim'}]);
+      expect(el.links).to.deep.equal([
+        { url: '/sinistre', label: 'Make a claim' },
+      ]);
       expect(query(el, 'a')!.getAttribute('href')).to.equal('/sinistre');
     });
   });
@@ -124,15 +163,23 @@ describe('axa-card', () => {
     });
 
     it("ignore inverted quand il n'y a pas d'image", async () => {
-      const withImage = await fixture<AxaCard>(html`<axa-card inverted image=${IMAGE}></axa-card>`);
-      const withoutImage = await fixture<AxaCard>(html`<axa-card inverted></axa-card>`);
+      const withImage = await fixture<AxaCard>(
+        html`<axa-card inverted image=${IMAGE}></axa-card>`,
+      );
+      const withoutImage = await fixture<AxaCard>(
+        html`<axa-card inverted></axa-card>`,
+      );
 
-      expect(article(withImage).classList.contains('card--inverted')).to.be.true;
-      expect(article(withoutImage).classList.contains('card--inverted')).to.be.false;
+      expect(article(withImage).classList.contains('card--inverted')).to.be
+        .true;
+      expect(article(withoutImage).classList.contains('card--inverted')).to.be
+        .false;
     });
 
     it('met à jour le rendu quand une prop change', async () => {
-      const el = await fixture<AxaCard>(html`<axa-card card-title="Avant"></axa-card>`);
+      const el = await fixture<AxaCard>(
+        html`<axa-card card-title="Avant"></axa-card>`,
+      );
 
       el.cardTitle = 'Après';
       el.type = 'sm';
@@ -145,21 +192,36 @@ describe('axa-card', () => {
 
   describe('responsive (breakpoint)', () => {
     it('passe en vertical quand la carte est plus étroite que le breakpoint', async () => {
-      const el = await fixture<AxaCard>(html`<axa-card type="lg" style="width: 500px"></axa-card>`);
+      const el = await fixture<AxaCard>(
+        html`<axa-card type="lg" style="width: 500px"></axa-card>`,
+      );
 
-      await waitUntil(() => article(el).classList.contains('card--vertical'), 'la carte doit passer en vertical');
+      await waitUntil(
+        () => article(el).classList.contains('card--vertical'),
+        'la carte doit passer en vertical',
+      );
     });
 
     it('ne passe pas en vertical avec breakpoint="0"', async () => {
-      const el = await fixture<AxaCard>(html`<axa-card type="lg" breakpoint="0" style="width: 500px"></axa-card>`);
+      const el = await fixture<AxaCard>(
+        html`<axa-card
+          type="lg"
+          breakpoint="0"
+          style="width: 500px"
+        ></axa-card>`,
+      );
       await waitForMeasure(el);
 
       expect(article(el).classList.contains('card--vertical')).to.be.false;
     });
 
     it('ne change pas les cartes sm et bg, même étroites', async () => {
-      const sm = await fixture<AxaCard>(html`<axa-card type="sm" style="width: 300px"></axa-card>`);
-      const bg = await fixture<AxaCard>(html`<axa-card type="bg" style="width: 300px"></axa-card>`);
+      const sm = await fixture<AxaCard>(
+        html`<axa-card type="sm" style="width: 300px"></axa-card>`,
+      );
+      const bg = await fixture<AxaCard>(
+        html`<axa-card type="bg" style="width: 300px"></axa-card>`,
+      );
       await waitForMeasure(sm);
       await waitForMeasure(bg);
 
@@ -170,10 +232,14 @@ describe('axa-card', () => {
 
   describe('accessibilité', () => {
     it('relie la carte à son titre avec aria-labelledby', async () => {
-      const el = await fixture<AxaCard>(html`<axa-card card-title="Car Insurance"></axa-card>`);
+      const el = await fixture<AxaCard>(
+        html`<axa-card card-title="Car Insurance"></axa-card>`,
+      );
       const id = article(el).getAttribute('aria-labelledby')!;
 
-      expect(el.shadowRoot!.getElementById(id)!.textContent!.trim()).to.equal('Car Insurance');
+      expect(el.shadowRoot!.getElementById(id)!.textContent!.trim()).to.equal(
+        'Car Insurance',
+      );
     });
 
     it("passe l'audit d'accessibilité axe (carte complète)", async () => {
@@ -186,8 +252,8 @@ describe('axa-card', () => {
           card-title="Car Insurance"
           content="Texte de la carte"
           .links=${[
-            {url: '#', label: 'Make a claim', type: 'link'},
-            {url: '#', label: 'Get a quote', type: 'button'},
+            { url: '#', label: 'Make a claim', type: 'link' },
+            { url: '#', label: 'Get a quote', type: 'button' },
           ]}
         ></axa-card>
       `);

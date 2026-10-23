@@ -8,53 +8,66 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap"/>
+      href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap"
+    />
     <title>test-axa-card</title>
     <link rel="stylesheet" href="./src/index.css" />
     <script type="module" src="/src/axa-card.ts"></script>
   </head>
   <body>
-      <main>
-        <form class="controls" id="controls">
-          <label>
-            type
-            <select name="type">
-              <option value="sm">sm</option>
-              <option value="md">md</option>
-              <option value="lg" selected>lg</option>
-              <option value="bg">bg</option>
-            </select>
-          </label>
-          <label><input type="checkbox" name="inverted" /> inverted</label>
-          <label><input type="checkbox" name="vertical" /> vertical</label>
-          <label><input type="checkbox" name="isInverse" /> is-inverse</label>
-          <label><input type="checkbox" name="withImage" checked /> image</label>
-          <label>
-              breakpoint
-              <input type="number" name="breakpoint" value="750" min="0" step="50" />
-            </label>
-            <label>
-              largeur de la carte
-              <input type="range" name="width" min="280" max="1100" value="1100" step="10" />
-              <output name="widthValue">1100px</output>
-            </label>
+    <main>
+      <form class="controls" id="controls">
+        <label>
+          type
+          <select name="type">
+            <option value="sm">sm</option>
+            <option value="md">md</option>
+            <option value="lg" selected>lg</option>
+            <option value="bg">bg</option>
+          </select>
+        </label>
+        <label><input type="checkbox" name="inverted" /> inverted</label>
+        <label><input type="checkbox" name="vertical" /> vertical</label>
+        <label><input type="checkbox" name="isInverse" /> is-inverse</label>
+        <label><input type="checkbox" name="withImage" checked /> image</label>
+        <label>
+          breakpoint
+          <input
+            type="number"
+            name="breakpoint"
+            value="750"
+            min="0"
+            step="50"
+          />
+        </label>
+        <label>
+          largeur de la carte
+          <input
+            type="range"
+            name="width"
+            min="280"
+            max="1100"
+            value="1100"
+            step="10"
+          />
+          <output name="widthValue">1100px</output>
+        </label>
+      </form>
 
-        </form>
-
-        <axa-card
-          id="playground-card"
-          type="lg"
-          image="https://picsum.photos/id/1067/800/600"
-          subhead="Subhead"
-          card-date="2021-03-21"
-          card-title="This is the card title"
-          content="Some quick example text to build on the card title and make up the bulk of the card's content."
-          links='[
+      <axa-card
+        id="playground-card"
+        type="lg"
+        image="https://picsum.photos/id/1067/800/600"
+        subhead="Subhead"
+        card-date="2021-03-21"
+        card-title="This is the card title"
+        content="Some quick example text to build on the card title and make up the bulk of the card's content."
+        links='[
             {"url": "#", "label": "MAKE A CLAIM", "type": "link", "variation": "primary"},
             {"url": "#", "label": "Primary button", "type": "button", "variation": "primary"}
           ]'
-        ></axa-card>
-      </main>
+      ></axa-card>
+    </main>
 
     <script type="module">
       // Chaque changement dans le formulaire met à jour une prop de la carte.

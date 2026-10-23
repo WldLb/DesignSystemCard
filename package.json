@@ -8,7 +8,8 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "wtr",
-    "test:watch": "wtr --watch"
+    "test:watch": "wtr --watch",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "lit": "^3.3.3"
@@ -19,6 +20,7 @@
     "@web/dev-server-esbuild": "^2.0.0",
     "@web/test-runner": "^1.0.0",
     "@web/test-runner-playwright": "^1.0.0",
+    "prettier": "3.9.10",
     "typescript": "~6.0.3",
     "vite": "^8.3.4"
   }

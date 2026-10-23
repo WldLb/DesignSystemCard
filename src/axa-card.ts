@@ -1,7 +1,7 @@
-import {LitElement, html, nothing} from 'lit';
-import {customElement, property, state} from 'lit/decorators.js';
-import {classMap} from 'lit/directives/class-map.js';
-import {styles} from './axa-card.style.js';
+import { LitElement, html, nothing } from 'lit';
+import { customElement, property, state } from 'lit/decorators.js';
+import { classMap } from 'lit/directives/class-map.js';
+import { styles } from './axa-card.style.js';
 
 // Types union plutôt qu'enum : erasableSyntaxOnly (tsconfig) interdit les enum.
 export type CardLinkType = 'link' | 'button';
@@ -24,10 +24,10 @@ export class AxaCard extends LitElement {
   subhead = '';
 
   // Pas « title » : c'est un attribut HTML natif (info-bulle au survol).
-  @property({attribute: 'card-title'})
+  @property({ attribute: 'card-title' })
   cardTitle = '';
 
-  @property({attribute: 'card-date'})
+  @property({ attribute: 'card-date' })
   cardDate = '';
 
   @property()
@@ -37,25 +37,25 @@ export class AxaCard extends LitElement {
   image = '';
 
   // Vide par défaut : l'image est décorative et ignorée par les lecteurs d'écran.
-  @property({attribute: 'image-alt'})
+  @property({ attribute: 'image-alt' })
   imageAlt = '';
 
   @property()
   type: CardType = 'lg';
 
-  @property({type: Boolean})
+  @property({ type: Boolean })
   inverted = false;
 
-  @property({type: Boolean})
+  @property({ type: Boolean })
   vertical = false;
 
-  @property({type: Boolean, attribute: 'is-inverse'})
+  @property({ type: Boolean, attribute: 'is-inverse' })
   isInverse = false;
 
-  @property({type: Array})
+  @property({ type: Array })
   links: CardLink[] = [];
 
-  @property({type: Number})
+  @property({ type: Number })
   breakpoint = 750;
 
   // État interne : la largeur mesurée n'est pas une API publique.
@@ -98,17 +98,31 @@ export class AxaCard extends LitElement {
     };
 
     return html`
-      <article class=${classMap(classes)} aria-labelledby=${this.cardTitle ? 'card-title' : nothing}>
-        ${this.image
-          ? html`<img class="image" src=${this.image} alt=${this.imageAlt} loading="lazy" />`
-          : nothing}
+      <article
+        class=${classMap(classes)}
+        aria-labelledby=${this.cardTitle ? 'card-title' : nothing}
+      >
+        ${
+          this.image
+            ? html`<img
+                class="image"
+                src=${this.image}
+                alt=${this.imageAlt}
+                loading="lazy"
+              />`
+            : nothing
+        }
         <div class="body">
           ${this.renderMeta()}
           ${this.cardTitle ? html`<h2 id="card-title" class="title">${this.cardTitle}</h2>` : nothing}
           ${this.content ? html`<p class="content">${this.content}</p>` : nothing}
-          ${this.links.length > 0
-            ? html`<div class="links">${this.links.map((link) => this.renderLink(link))}</div>`
-            : nothing}
+          ${
+            this.links.length > 0
+              ? html`<div class="links">
+                  ${this.links.map((link) => this.renderLink(link))}
+                </div>`
+              : nothing
+          }
         </div>
       </article>
     `;
@@ -121,8 +135,15 @@ export class AxaCard extends LitElement {
   }
 
   // Toujours un <a> : la carte mène vers une page, type 'button' ne change que l'apparence.
-  private renderLink({url, label, type = 'link', variation = 'primary'}: CardLink) {
-    return html`<a class="link link--${type} link--${variation}" href=${url}>${label}</a>`;
+  private renderLink({
+    url,
+    label,
+    type = 'link',
+    variation = 'primary',
+  }: CardLink) {
+    return html`<a class="link link--${type} link--${variation}" href=${url}
+      >${label}</a
+    >`;
   }
 
   private renderMeta() {
@@ -132,12 +153,18 @@ export class AxaCard extends LitElement {
     return html`
       <p class="meta">
         ${this.subhead ? html`<span class="subhead">${this.subhead}</span>` : nothing}
-        ${this.subhead && this.cardDate
-          ? html`<span class="separator" aria-hidden="true">-</span>`
-          : nothing}
-        ${this.cardDate
-          ? html`<time class="date" datetime=${this.cardDate}>${this.formatDate(this.cardDate)}</time>`
-          : nothing}
+        ${
+          this.subhead && this.cardDate
+            ? html`<span class="separator" aria-hidden="true">-</span>`
+            : nothing
+        }
+        ${
+          this.cardDate
+            ? html`<time class="date" datetime=${this.cardDate}
+                >${this.formatDate(this.cardDate)}</time
+              >`
+            : nothing
+        }
       </p>
     `;
   }

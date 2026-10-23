@@ -1,17 +1,17 @@
-import {css} from 'lit';
+import { css } from 'lit';
 
 export const styles = css`
   :host {
     /* ---------- Tokens AXA ---------- */
-    --axa-card-font: 'Source Sans 3', 'Source Sans Pro', Arial, sans-serif; 
-    --axa-card-text: #343c3d; 
-    --axa-card-subhead: #e3000a; 
-    --axa-card-date: #606776; 
-    --axa-card-link: #00008f; 
+    --axa-card-font: 'Source Sans 3', 'Source Sans Pro', Arial, sans-serif;
+    --axa-card-text: #343c3d;
+    --axa-card-subhead: #e3000a;
+    --axa-card-date: #606776;
+    --axa-card-link: #00008f;
     --axa-card-link-hover: #0000f7;
-    --axa-card-button: #e3000a; 
-    --axa-card-button-hover: #cc0009; 
-    --axa-card-focus: #00008f; 
+    --axa-card-button: #e3000a;
+    --axa-card-button-hover: #cc0009;
+    --axa-card-focus: #00008f;
     --axa-card-inverse-bg: #00008f;
     --axa-card-inverse-text: #ffffff;
     --axa-card-overlay: rgba(52, 60, 61, 0.72);
@@ -82,7 +82,6 @@ export const styles = css`
     width: 185px;
     height: 185px;
   }
-
 
   .card--lg .image {
     width: 546px;
@@ -175,7 +174,7 @@ export const styles = css`
     padding: 12px 24px;
     border: 1px solid var(--axa-card-button);
     border-radius: 999px;
-    max-width: 100%; 
+    max-width: 100%;
   }
 
   /* primary : rouge plein. */
