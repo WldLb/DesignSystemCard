@@ -131,7 +131,7 @@ pas par le composant ; sans elle, la carte s'affiche en Arial.
 
 Un bouton `secondary` (contour rouge sur fond bleu) est peu contrasté sur `is-inverse` : préférer `light`.
 Le titre est toujours un `<h2>`, le niveau n'est pas configurable.
-Un JSON invalide dans l'attribut `links` est ignoré par Lit, sans message d'erreur.
+Un JSON invalide dans l'attribut `links` empêche le rendu de la carte (erreur dans la console).
 
 ## Tests
 
